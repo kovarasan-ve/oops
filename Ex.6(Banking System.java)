@@ -1,0 +1,76 @@
+interface BankingService {
+    void deposit(double amount);
+    void withdraw(double amount);
+    double getBalance();
+}
+
+// Account class implements the BankingService interface
+class Account implements BankingService {
+    private double balance;
+
+    public Account() {
+        balance = 0.0;
+    }
+
+    @Override
+    public void deposit(double amount) {
+        if (amount <= 0) {
+            System.out.println("Invalid deposit amount");
+        } else {
+            balance += amount;
+            System.out.println("Deposited ₹" + amount);
+        }
+    }
+
+    @Override
+    public void withdraw(double amount) {
+        if (amount <= 0) {
+            System.out.println("Invalid withdrawal amount");
+        } else if (amount > balance) {
+            System.out.println("Insufficient funds");
+        } else {
+            balance -= amount;
+            System.out.println("Withdrew ₹" + amount);
+        }
+    }
+
+    @Override
+    public double getBalance() {
+        return balance;
+    }
+}
+
+// Transaction class to log transactions
+class Transaction {
+    public void log(String message) {
+        System.out.println("Transaction Log: " + message);
+    }
+}
+
+// Main class to test the banking system
+public class BankSystem {
+    public static void main(String[] args) {
+        // Using interface reference (polymorphism)
+        BankingService service = new Account();
+        Transaction transaction = new Transaction();
+
+        // Test Case 1: Deposit ₹1000
+        service.deposit(1000);
+        transaction.log("Deposited ₹1000. Balance: ₹" + service.getBalance());
+
+        // Test Case 2: Withdraw ₹500
+        service.withdraw(500);
+        transaction.log("Withdrew ₹500. Balance: ₹" + service.getBalance());
+
+        // Test Case 3: Withdraw ₹1500
+        service.withdraw(1500);
+        transaction.log("Attempted to withdraw ₹1500. Balance: ₹" + service.getBalance());
+
+        // Test Case 4: Deposit negative amount
+        service.deposit(-200);
+        transaction.log("Attempted to deposit -₹200. Balance: ₹" + service.getBalance());
+
+        // Test Case 5: Log transaction
+        transaction.log("All transactions completed.");
+    }
+}
